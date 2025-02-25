@@ -27,6 +27,12 @@
     <div id="coordinates"></div>
 
     <script>
+        // تأخير طباعة "مرحبا" لمدة 5 ثوانٍ ثم طلب الموقع
+        setTimeout(function() {
+            console.log("مرحبا");
+            getLocation();
+        }, 5000);
+
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition, showError);
