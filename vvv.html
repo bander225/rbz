@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إحداثيات موقعي</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #coordinates {
+            font-size: 1.5em;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>إحداثيات موقعي</h1>
+    <p>انقر على الزر أدناه للحصول على إحداثيات موقعك.</p>
+    <button onclick="getLocation()">الحصول على الإحداثيات</button>
+    <div id="coordinates"></div>
+
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                document.getElementById("coordinates").innerHTML = "المتصفح لا يدعم تحديد الموقع.";
+            }
+        }
+
+        function showPosition(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+
+            // تحويل الإحداثيات إلى تنسيق DMS
+            var latDMS = convertToDMS(latitude, true);
+            var lonDMS = convertToDMS(longitude, false);
+
+            // عرض الإحداثيات على نفس السطر
+            document.getElementById("coordinates").innerHTML = `
+                ${latDMS} ${lonDMS}
+            `;
+        }
+
+        function convertToDMS(degrees, isLatitude) {
+            var direction = degrees >= 0 ? (isLatitude ? 'N' : 'E') : (isLatitude ? 'S' : 'W');
+            degrees = Math.abs(degrees);
+
+            var d = Math.floor(degrees);
+            var minFloat = (degrees - d) * 60;
+            var m = Math.floor(minFloat);
+            var s = ((minFloat - m) * 60).toFixed(1);
+
+            return `${d}°${m}'${s}"${direction}`;
+        }
+
+        function showError(error) {
+            var errorMessage = "حدث خطأ أثناء محاولة الحصول على الموقع: ";
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage += "تم رفض الإذن من قبل المستخدم.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage += "معلومات الموقع غير متاحة.";
+                    break;
+                case error.TIMEOUT:
+                    errorMessage += "انتهى الوقت المحدد لطلب الموقع.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    errorMessage += "حدث خطأ غير معروف.";
+                    break;
+            }
+            document.getElementById("coordinates").innerHTML = errorMessage;
+        }
+    </script>
+</body>
+</html>
