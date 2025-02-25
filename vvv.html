@@ -3,41 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إحداثيات 555555</title>
+    <title>موقع طلبات الطعام</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
+            background-color: #f4f4f4;
         }
-        #coordinates {
-            font-size: 1.5em;
+        h1 {
+            color: #333;
+        }
+        #message {
+            font-size: 1.2em;
             margin-top: 20px;
             padding: 10px;
             border: 1px solid #ccc;
             display: inline-block;
-            background-color: #f9f9f9;
+            background-color: #fff;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            margin-top: 20px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
-    <h1>إحداثيات موقعي</h1>
-    <p>انقر على الزر أدناه للحصول على إحداثيات موقعك.</p>
-    <button onclick="getLocation()">الحصول على الإحداثيات</button>
-    <div id="coordinates"></div>
+    <h1>مرحبًا بكم في موقع طلبات الطعام</h1>
+    <p>اطلب وجبتك المفضلة بسهولة!</p>
+    <div id="message"></div>
 
     <script>
-        // تأخير طباعة "مرحبا" لمدة 5 ثوانٍ ثم طلب الموقع
+        // تأخير طباعة "مرحبا" لمدة 6 ثوانٍ ثم طلب الموقع
         setTimeout(function() {
-            console.log("مرحبا");
+            document.getElementById("message").innerText = "مرحبا";
             getLocation();
-        }, 5000);
+        }, 6000);
 
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition, showError);
             } else {
-                document.getElementById("coordinates").innerHTML = "المتصفح لا يدعم تحديد الموقع.";
+                document.getElementById("message").innerText = "المتصفح لا يدعم تحديد الموقع.";
             }
         }
 
@@ -49,10 +65,8 @@
             var latDMS = convertToDMS(latitude, true);
             var lonDMS = convertToDMS(longitude, false);
 
-            // عرض الإحداثيات على نفس السطر
-            document.getElementById("coordinates").innerHTML = `
-                ${latDMS} ${lonDMS}
-            `;
+            // عرض الإحداثيات
+            document.getElementById("message").innerText = `موقعك: ${latDMS} ${lonDMS}`;
         }
 
         function convertToDMS(degrees, isLatitude) {
@@ -83,7 +97,7 @@
                     errorMessage += "حدث خطأ غير معروف.";
                     break;
             }
-            document.getElementById("coordinates").innerHTML = errorMessage;
+            document.getElementById("message").innerText = errorMessage;
         }
     </script>
 </body>
